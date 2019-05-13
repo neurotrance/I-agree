@@ -80,7 +80,7 @@
  */
 
  function getData() {  
-    $.getCSV('https://docs.google.com/spreadsheets/d/e/2PACX-1vT5Pp6MNng27W_qkM4z1GB3iXXd4dR5TtIUylWWLL_LSqBtvCt9FVxx__b9egh0GCS-N4Q6oVnmboJJ/pub?output=csv', function(data) {
+    $.get('https://docs.google.com/spreadsheets/d/e/2PACX-1vT5Pp6MNng27W_qkM4z1GB3iXXd4dR5TtIUylWWLL_LSqBtvCt9FVxx__b9egh0GCS-N4Q6oVnmboJJ/pub?output=csv', function(data) {
       console.log($.csv.toObjects(data));
       var statements = $.csv.toObjects(data);
     });
