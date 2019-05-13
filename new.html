@@ -39,7 +39,9 @@
   */
 
   function showData(varName) {
-    document.body.innerHTML = varName;
+    document.body.innerHTML = JSON.stringify(varName);
+    console.log(varName);
+    console.log(JSON.stringify(varName));
   }
 
   function getData(varName, docID, sheetID) {
