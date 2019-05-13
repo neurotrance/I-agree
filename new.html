@@ -3,7 +3,7 @@
 <head>
   <style>
     html{height:100%}
-    body{color:white; background-color:black; font-size:24px; font-family:"Arial"; min-height:100%; overflow:none; display:flex; justify-content:center;}
+    body{color:white; background-color:black; font-size:8px; font-family:"Arial"; min-height:100%; overflow:none; display:flex; justify-content:center;}
     .top{position:absolute; top:25%; overflow:none; margin:0px; padding:0px; align-items:center; justify-content:center;}
     .btm{position:absolute; bottom:25%; overflow:none; margin:0px; padding:0px; align-items:center; justify-content:center;}
     .ctr{position:absolute;align-self:center; overflow:none; margin:0px; padding:0px; align-items:center; justify-content:center;}
@@ -39,7 +39,7 @@
   */
 
   function showData(varName) {
-    console.log(varName);
+    document.body.innerHTML = varName;
   }
 
   function getData(varName, docID, sheetID) {
