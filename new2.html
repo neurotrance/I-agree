@@ -46,6 +46,11 @@
     console.log('longer key' + data);
   });
 
+  $.getJSON('https://spreadsheets.google.com/feeds/list/2PACX-1vT5Pp6MNng27W_qkM4z1GB3iXXd4dR5TtIUylWWLL_LSqBtvCt9FVxx__b9egh0GCS-N4Q6oVnmboJJ/od6/public/values?alt=json', function(data) {
+    console.log('test sheet: ' + data);
+  });
+
+
 /*
 
   $.ajax({
@@ -55,6 +60,8 @@
     console.log(data);
   }});
 
+
+2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy
 
 // https://docs.google.com/spreadsheets/d/1PRSaZU1kTDrrcDjfbsknp1ixefiUDuNwfeJIBO7YXOc/edit?usp=sharing
 // https://spreadsheets.google.com/feeds/list/2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy/od6/public/values?alt=json
