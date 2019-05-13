@@ -16,8 +16,7 @@
   <div class="ctr">"Center"</div>
   <div class="btm">"Bottom"</div>
 </body>
-<script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
-<script> </script>
+<!-- <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script> -->
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery.csv.js"></script>
 <script>
@@ -67,7 +66,7 @@
 // 2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy/pub?gid=518786786
 
 
-  */
+
 
   $.ajax({
   dataType: "csv",
@@ -78,14 +77,19 @@
     console.log(statements);
   }});
 
- /*
-   
+ */
+
+ function getData() {  
     $.getCSV('https://docs.google.com/spreadsheets/d/e/2PACX-1vT5Pp6MNng27W_qkM4z1GB3iXXd4dR5TtIUylWWLL_LSqBtvCt9FVxx__b9egh0GCS-N4Q6oVnmboJJ/pub?output=csv', function(data) {
+      console.log($.csv.toObjects(data));
       var statements = $.csv.toObjects(data);
     });
     console.log(statements);
-    
+ }
 
+ getData();
+    
+/*
 
     var statementsNoIDs = [
         'A good toy\'s head is filled with colors and light.',
