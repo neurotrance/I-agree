@@ -16,13 +16,12 @@
   <div class="ctr">"Center"</div>
   <div class="btm">"Bottom"</div>
 </body>
-<script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
-<script> </script>
+<!-- <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script> -->
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery.csv.js"></script>
 <script>
   
-  "use strict";
+  // "use strict";
 /*
   var firebaseConfig = {
     apiKey: "AIzaSyCkLd2mVSt9UPlZtEuDw05rgEkfpPXXpBQ",
@@ -38,10 +37,19 @@
   var database = firebase.database();
 
 
-
-  $.getJSON('http://cors.io/?https://spreadsheets.google.com/feeds/list/2Zy/od6/public/values?alt=json-in-script&callback=', function(data) {
-    console.log(data);
+  
+  $.getJSON('https://spreadsheets.google.com/feeds/list/1PRSaZU1kTDrrcDjfbsknp1ixefiUDuNwfeJIBO7YXOc/od6/public/values?alt=json', function(data) {
+    console.log('shorter key: ' + data);
   });
+
+  $.getJSON('https://spreadsheets.google.com/feeds/list/2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy/od6/public/values?alt=json', function(data) {
+    console.log('longer key' + data);
+  });
+
+  $.getJSON('https://spreadsheets.google.com/feeds/list/2PACX-1vT5Pp6MNng27W_qkM4z1GB3iXXd4dR5TtIUylWWLL_LSqBtvCt9FVxx__b9egh0GCS-N4Q6oVnmboJJ/od6/public/values?alt=json', function(data) {
+    console.log('test sheet: ' + data);
+  });
+
 
 
 
@@ -53,8 +61,7 @@
   }});
 
 
-
-
+2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy
 
 // https://docs.google.com/spreadsheets/d/1PRSaZU1kTDrrcDjfbsknp1ixefiUDuNwfeJIBO7YXOc/edit?usp=sharing
 // https://spreadsheets.google.com/feeds/list/2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy/od6/public/values?alt=json
@@ -67,21 +74,36 @@
 // 2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy/pub?gid=518786786
 
 
-  */
+
 
   $.ajax({
   dataType: "csv",
-  url: 'http://cors.io/?https://docs.google.com/spreadsheets/d/e/2PACX-1vT5Pp6MNng27W_qkM4z1GB3iXXd4dR5TtIUylWWLL_LSqBtvCt9FVxx__b9egh0GCS-N4Q6oVnmboJJ/pub?output=csv',
+  url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT5Pp6MNng27W_qkM4z1GB3iXXd4dR5TtIUylWWLL_LSqBtvCt9FVxx__b9egh0GCS-N4Q6oVnmboJJ/pub?output=csv',
   success: function(data) {
-    console.log(data);
+    console.log($.csv.toObjects(data));
+    var statements = $.csv.toObjects(data);
+    console.log(statements);
   }});
 
- /*
-   
-    $.getCSV('https://docs.google.com/spreadsheets/d/e/2PACX-1vT5Pp6MNng27W_qkM4z1GB3iXXd4dR5TtIUylWWLL_LSqBtvCt9FVxx__b9egh0GCS-N4Q6oVnmboJJ/pub?output=csv', function(data) {
-      var statements = $.csv.toObjects(data);
+ */
+ /// this code works! --> 
+ // var statements;
+
+ function showData(data) {
+     console.log(eval(varName));
+ }
+
+ function getData(varName, docID, sheetID) {  
+    $.get('https://docs.google.com/spreadsheets/d/e/' + docID + '/pub?gid=' + sheetID + '&single=true&output=csv', function(data) {
+      eval(varName) = $.csv.toObjects(data);
+      showData(varName);
     });
-    console.log(statements);
+ }
+
+ getData('statements', '2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy', '518786786');
+ ///
+ /*
+
     
 
 
