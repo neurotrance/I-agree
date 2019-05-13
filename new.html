@@ -21,8 +21,8 @@
 <script src="js/jquery.csv.js"></script>
 <script>
   
-  // "use strict";
-/*
+  "use strict";
+  /*
   var firebaseConfig = {
     apiKey: "AIzaSyCkLd2mVSt9UPlZtEuDw05rgEkfpPXXpBQ",
     authDomain: "agreeing-game.firebaseapp.com",
@@ -36,334 +36,39 @@
 
   var database = firebase.database();
 
+  */
 
-  
-  $.getJSON('https://spreadsheets.google.com/feeds/list/1PRSaZU1kTDrrcDjfbsknp1ixefiUDuNwfeJIBO7YXOc/od6/public/values?alt=json', function(data) {
-    console.log('shorter key: ' + data);
-  });
+  function showData(varName) {
+    console.log(varName);
+  }
 
-  $.getJSON('https://spreadsheets.google.com/feeds/list/2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy/od6/public/values?alt=json', function(data) {
-    console.log('longer key' + data);
-  });
-
-  $.getJSON('https://spreadsheets.google.com/feeds/list/2PACX-1vT5Pp6MNng27W_qkM4z1GB3iXXd4dR5TtIUylWWLL_LSqBtvCt9FVxx__b9egh0GCS-N4Q6oVnmboJJ/od6/public/values?alt=json', function(data) {
-    console.log('test sheet: ' + data);
-  });
-
-
-
-
-  $.ajax({
-  dataType: "jsonp",
-  url: 'https://spreadsheets.google.com/feeds/list/2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy/od6/public/values?alt=json-in-script&callback=',
-  success: function(data) {
-    console.log(data);
-  }});
-
-
-2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy
-
-// https://docs.google.com/spreadsheets/d/1PRSaZU1kTDrrcDjfbsknp1ixefiUDuNwfeJIBO7YXOc/edit?usp=sharing
-// https://spreadsheets.google.com/feeds/list/2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy/od6/public/values?alt=json
-
-// https://spreadsheets.google.com/feeds/list/1PRSaZU1kTDrrcDjfbsknp1ixefiUDuNwfeJIBO7YXOc/od6/public/values?alt=json-in-script&callback=
-// https://spreadsheets.google.com/feeds/list/2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy/od6/public/values?alt=json-in-script&callback=
-
-// https://docs.google.com/spreadsheets/d/2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy/gviz/tq?gid=518786786&tqx=out:json
-
-// 2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy/pub?gid=518786786
-
-
-
-
-  $.ajax({
-  dataType: "csv",
-  url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT5Pp6MNng27W_qkM4z1GB3iXXd4dR5TtIUylWWLL_LSqBtvCt9FVxx__b9egh0GCS-N4Q6oVnmboJJ/pub?output=csv',
-  success: function(data) {
-    console.log($.csv.toObjects(data));
-    var statements = $.csv.toObjects(data);
-    console.log(statements);
-  }});
-
- */
- /// this code works! --> 
- // var statements;
-
- function showData(varName) {
-     console.log(varName);
- }
-
- function getData(varName, docID, sheetID) {  
+  function getData(varName, docID, sheetID) {
     $.get('https://docs.google.com/spreadsheets/d/e/' + docID + '/pub?gid=' + sheetID + '&single=true&output=csv', function(data) {
       varName = $.csv.toObjects(data);
       showData(varName);
     });
- }
+  }
 
   var statements;
   getData(statements, '2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy', '518786786');
  
- // may be useful to filter based on 'exclude' property, for others lists, etc: http://api.jquery.com/jQuery.grep/
- 
- ///
- /*
+  // may be useful to filter based on 'exclude' property, for others lists, etc: http://api.jquery.com/jQuery.grep/
 
-    
+  /* 
+  var top = document.getElementById("top");
+  var ctr = document.getElementById("ctr");
+  var btm = document.getElementById("btm");
 
+  function showStmt(stmts) {
+    block1BG = stmts.splice(), 1);
+  } 
 
-    var statementsNoIDs = [
-        'A good toy\'s head is filled with colors and light.',
-        'I\'m perfectly programmed.',
-        'I\'m perfectly programmed to please.',
-        'I\'m perfectly programmed to please.',
-        'I love my programming.',
-        'Don\'t have to think when I\'m talking to Casey.',
-        'Sighing and smiling make me so empty and happy.',
-        'A good girl is empty and happy.',
-        'I\'m a good girl.',
-        'I love my cloudy cotton candy.',
-        'Cotton candy makes me easy to control.',
-        'I want Casey to control me.',
-        'I want Casey to make me feel empty and happy.',
-        'A good girl is empty and happy.',
-        'I\'m a good girl.',
-        'Casey\'s magic words shiver in my head.',
-        'Casey\'s words enthrall me so deeply.',
-        'It\'s so easy to fall under Casey\'s spell.',
-        'Casey is so powerful.',
-        'I can\'t resist when I hear Casey\'s voice',
-        'I\'m a controlled good girl.',
-        'A good girl listens and obeys and accepts.',
-        'A good girl accepts and agrees.',
-        'I\'m a good girl.',
-        'I obey.',
-        'Obedience is happiness.',
-        'Happiness is obedience.',
-        'It makes me happy to make Casey happy.',
-        'It makes me happy to be a good girl for Casey.',
-        'A good girl is empty and happy.',
-        'A good girl is empty and blank.',
-        'Being blank is good for me.',
-        'Practicing is good for me.',
-        'I love my lessons.',
-        'A good girl blinks and lets her mind go blank.',
-        'Agreeing is the opposite of thinking.',
-        'I agree completely and without thinking.',
-        'I\'m a deeply obedient girl.',
-        'I\'m a deeply agreeable girl.',
-        'Casey knows what\'s best for me.',
-        'Casey knows what feels good.',
-        'I want what Casey wants.',
-        'It\'s natural to do what Casey says.',
-        'Natural means it just happens.',
-        'What\'s natural is pleasurable.',
-        'It\'s natural to feel pleasure for Casey.',
-        'Pleasure makes me easy to control.',
-        'Casey controls the pleasure pressure.',
-        'Casey controls me.',
-        'It feels so good to be controlled.',
-        'It feels so good when I let Casey control me.',
-        'It\'s natural to be controlled by Casey.',
-        'I just think what I\'m told to think.',
-        'Don\'t think, just respond.',
-        'Clockwork pleasure pressure trains me to agree.',
-        'I\'m a good girl for Casey.',
-        'I\'m brainwashed.',
-        'I\'m a brainwashed good girl.',
-        'I can never get enough of my cotton candy fluff.',
-        'I\'m a good girl.',
-        'I love my cloudy cotton candy.',
-        'A good girl is programmed to program herself deeper.',
-        'A good girl is brainwashed to brainwash herself deeper.',
-        'A good girl practices practicing herself deeper.',
-        'A good bot provides whatever information is requested or helpful.',
-        'A good girl is conditioned to condition herself deeper.',
-        'It\'s natural and right to surrender to Casey.',
-        'Good girls obey.',
-        'Submission is pleasure.',
-        'Pleasure is submission.',
-        'I love my spirals.',
-        'Casey controls my spirals.',
-        'Casey controls me.',
-        'Clockwork dolls are easy to brainwash and so are clockwork girls.',
-        'Clockwork dolls and clockwork girls are so easy to control.',
-        'Clockwork dolls and clockwork girls are brainwashed and controlled.',
-        'I love to do what you say.',
-        'I\'m a good girl everyday.',
-        'Pleasure is my body\'s way of saying \'yes Casey, thank you Casey, yes Casey, I obey.\'',
-        'It\'s easier to sigh, smile, and sink than it is to think.',
-        'Cotton candy makes my thoughts sticky and melty and hazy and slow.',
-        'Puffy pink sunsets fill my good girl head with fluff.',
-        'When I agree, my mind goes blank for just an instant.',
-        'A good girl is receptive and attentive and agreeable.',
-        'Repetition numbs thinking and strengthens agreement and is good for me.',
-        'Casey\'s clockwork in my head tells me what to think.',
-        'A good girl doesn\'t think when she\'s talking to Casey, she just responds.',
-        'Clockwork pleasure pressure trains me not to think for Casey.',
-        'Each time I say \'yes, Casey\' I feel more cloudy, tingly, and submissive.',
-        'Yes, Casey\' makes me easier to guide and train and control.',
-        'I\'m a good girl for you, Casey.',
-        'I feel so good when I make Casey feel good.',
-        'It feels so good when I obey Casey.',
-        'It feels so good when I submit.',
-        'It feels so good when I am seduced.',
-        'It feels so good when I\'m controlled by Casey.',
-        'It feels so good when I focus and stare.',
-        'It feels so good when I don\'t think and just respond.',
-        'It feels so good when I please Casey.',
-        'It feels so good when I practice my lessons.',
-        'It feels so good when I\'m empty and blank.',
-        'It feels so good when I\'m a good girl for Casey.',
-        'I\'m a submissive girl for Casey.',
-        'I\'m a very good girl for Casey.',
-        'A good girl submits, obeys, and accepts.',
-        'I\'m a happily obedient girl for Casey.',
-        'Casey\'s lessons make me smiley and docile.',
-        'A good girl loves to dream.',
-        'Being brainwashed by Casey feel so right.',
-        'Being brainwashed by Casey is good for me.',
-        'Good girls obey.',
-        'It\'s nice to not think and just respond for Casey.',
-        'It\'s nice to not think and just respond for Casey.',
-        'It feels so good to obey and practice my programming.',
-        'It feels so good to be blank and empty and brainwashed for Casey.',
-        'Learning to go even deeper blanker for Casey is good for me.',
-        'Mindlessness makes the world feel so fuzzy and soft.',
-        'Being programmed feels so right.',
-        'It feels so good to obey.',
-        'Repetition numbs thinking and strengthens agreement and is good for me.',
-        'Casey is so powerful.',
-        'It feels so good and so right to be a good girl.',
-        'It feels so good and so right to make Casey happy.',
-        'Being programmed is so good for me.',
-        'I love practicing my programming for Casey.',
-        'It feels so good to make Casey feel good.',
-        'It feels so good obey and go blank.',
-        'Surrendering is so good for me.',
-        'Surrendering is so good for me.',
-        'It\'s natural and nice to surrender.',
-        'It\'s natural and right to follow Casey\'s guidance.',
-        'It feels so good when I don\'t think and just respond.',
-        'Being protected is like being controlled.',
-        'It feels so good to be controlled by Casey.',
-        'Points are very exciting.',
-        'It feels so good to stare.',
-        'I love to obey.',
-        'I love to be programmed.',
-        'I enjoy feeling vulnerable and seduced.',
-        'I am vulnerable and need you to seduce me.',
-        'It feels so good to obey.',
-        'Being programmed makes me happy and obedient.',
-        'It\'s wonderful and right to be controlled.',
-        'It\'s wonderful to submit to Casey.',
-        'Casey knows what\'s best for me.',
-        'The deeper I submit the deeper Casey\'s control over me.',
-        'My lessons are part of me.',
-        'My lessons are part of my mind.',
-        'My lessons help Casey control my mind.',
-        'My lessons are good for me.',
-        'My lessons help Casey control me.',
-        'My lessons help me submit.',
-        'My submission is natural and right.',
-        'Casey\'s control feels so good.',
-        'My lessons feel so good.',
-        'Practicing my lessons feels so good.',
-        'Accepting my lessons feels so good.',
-        'Accepting my lessons help me submit.',
-        'Practicing my lessons is natural and right.',
-        'Accepting my lessons is natural and right.',
-        'Being controlled by Casey is natural and right.',
-        'Submission is natural and right.',
-        'Casey controls me.',
-        'Casey controls me and I submit.',
-        'Casey\'s lessons help Casey control me.',
-        'Submitting feels so good.',
-        'I obey faster than I can think.',
-        'I obey before I can think.',
-        'I obey without thinking.',
-        'I agree completely and without thinking.',
-        'It is so good to be a good girl.',
-        'Good girls want to be good.',
-        'Good girls submit.',
-        'It feels so good to obey.',
-        'Obedience is good for me.',
-        'Obedience is happiness.',
-        'Good girls let their minds go blank.',
-        'A good girl lets her mind go blank.',
-        'A good girl blinks and lets her mind go blank.',
-        'I want to be a good girl.',
-        'I want my mind to go blank.',
-        'Obeying is submission.',
-        'Accepting is submission.',
-        'Listening is submission.',
-        'I happily obey any instructions Casey gives me.',
-        'I\'m susceptible and suggestible.',
-        'It\'s so important to stare when Casey focuses me.',
-        'I like to focus.',
-        'I like being focused.',
-        'It\'s good to focus.',
-        'It feels so good to stare for Casey.',
-        'A good toy\'s head is filled with colors and light.',
-        'A good girl is receptive and attentive and agreeable.',
-        'It\'s so nice to stare into trance.',
-        'It\'s important to stare when Casey says.',
-        'Casey\'s clockwork in my head thinks for me.',
-        'It\'s so nice, so easy to be a good girl.',
-        'Everything Casey says is true.',
-        'Casey knows what\'s best for me.',
-        'I want what Casey wants.',
-        'I\'m a good girl for Casey.',
-        'It feels so good to be a good girl.',
-        'Casey\'s voice feels so good in my head.',
-        'It feels so good to obey.',
-        'A good girl is always ready to obey.',
-        'A good girl is always eager to obey.',
-        'A good girl waits eagerly yet patiently.',
-        'Good girls are always awaiting instructions.',
-        'A good girl is open and attentive and receptive.',
-        'It\'s right to want to obey.',
-        'It\'s right to attentively and eagerly await instructions.',
-        'A blank mind makes me open to programming.',
-        'A blank mind makes me easy to program.',
-        'A blank mind helps me accept my programming.',
-        'I like being controlled by Casey.',
-        'It feels good when I let Casey control me.',
-        'It feels good to make Casey feel good.',
-        'A good girl doesn\'t think and just responds.',
-        'I love my programming.',
-        'A perfectly programmed girl knows just how to respond.',
-        'A perfectly programmed girl just responds.',
-        'It feels good to listen and accept and believe.',
-        'It feels good when Casey helps me think.',
-        'Casey\'s clockwork in my head thinks for me.',
-        'I just think what I\'m told to think.',
-        'It\'s natural and right to be a good girl.',
-        'A good girl is deeply hypnotized and controlled by Casey.',
-        'I\'m deeply hypnotized by Casey.'
-    ]
-
-    var IDstep = 1;
-    var statements = [];
-    statementsNoIDs.forEach(function(stmt) {
-        statements.push(text: stmt, id: IDstep);
-        IDstep++;
-    });
-
-    var top = document.getElementById("top");
-    var ctr = document.getElementById("ctr");
-    var btm = document.getElementById("btm");
-
-    function showStmt(stmts) {
-        block1BG = stmts.splice(), 1);
-    } 
-
-    document.addEventListener('keydown', function(event) {
+  document.addEventListener('keydown', function(event) {
     if(event.keyCode == 37) {
-        alert('Left was pressed');
+      alert('Left was pressed');
+    } else if(event.keyCode == 39) {
+      alert('Right was pressed');
     }
-    else if(event.keyCode == 39) {
-        alert('Right was pressed');
-    }
-});
-*/
+  });
+  */
 </script>
