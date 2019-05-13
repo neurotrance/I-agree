@@ -89,18 +89,22 @@
  /// this code works! --> 
  // var statements;
 
- function showData(data) {
-     console.log(eval(varName));
+ function showData(varName) {
+     console.log(varName);
  }
 
  function getData(varName, docID, sheetID) {  
     $.get('https://docs.google.com/spreadsheets/d/e/' + docID + '/pub?gid=' + sheetID + '&single=true&output=csv', function(data) {
-      eval(varName) = $.csv.toObjects(data);
+      varName = $.csv.toObjects(data);
       showData(varName);
     });
  }
 
- getData('statements', '2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy', '518786786');
+  var statements;
+  getData(statements, '2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy', '518786786');
+ 
+ // may be useful to filter based on 'exclude' property, for others lists, etc: http://api.jquery.com/jQuery.grep/
+ 
  ///
  /*
 
