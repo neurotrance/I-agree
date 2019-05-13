@@ -78,18 +78,15 @@
   }});
 
  */
- 
- var statements;
- 
+  
  function getData() {  
     $.get('https://docs.google.com/spreadsheets/d/e/2PACX-1vT5Pp6MNng27W_qkM4z1GB3iXXd4dR5TtIUylWWLL_LSqBtvCt9FVxx__b9egh0GCS-N4Q6oVnmboJJ/pub?output=csv', function(data) {
-      console.log($.csv.toObjects(data));
-      statements = $.csv.toObjects(data);
+      return $.csv.toObjects(data);
     });
  }
 
- getData();
- console.log(statements);
+var statements = getData();
+console.log(statements);
     
 /*
 
