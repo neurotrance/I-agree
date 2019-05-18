@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>    
+<head>
+  <style>
+    html{height:100%}
+    body{color:white; background-color:black; font-size:24px; font-family:"Arial"; min-height:100%; overflow:none; display:flex; justify-content:center;}
+    .container1{position:absolute; align-self:center; overflow:none; margin:0px; padding:0px; text-align:center; align-items:center; justify-content:center;}
+    .container2{position:absolute; align-self:center; overflow:none; margin:0px; padding:0px; text-align:center; align-items:center; justify-content:center;}
+    .scoreboard{color:rgb(143, 143, 199); font-size:20px; position:absolute; top:0px; right:0px; overflow:none; margin:0px; padding-top:3em; padding-right:3em;}
+  </style>
+</head>
+<body>
+  <div class="container1"></div>
+  <div class="container2"></div>
+  <div class="scoreboard"></div></body>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.csv.js"></script>
+<script src="js/statements.js"></script>
+<script>
+
+(function() {
+
+  "use strict";
+
+  const container1 = document.querySelector('.container1'),
+        container2 = document.querySelector('.container2'),
+        scoreboard = document.querySelector('.scoreboard');
+  const twotone = new Audio('sounds/twotone.mp3'),
+        tick = new Audio('sounds/tick.wav'),
+        tock = new Audio('sounds/tock.wav'),
+        windup = new Audio('sounds/windup2.wav');
+  const ITIs = [500,1000,1500];
+  const t0 = performance.now();
+  let ITI = 1500,
+      t1 = 0,
+      t2 = 0,
+      agreeData = [],
+      currTask = '',
+      trialNum = 0,
+      score = 0,
+      points = 0,
+      blinkTimeout = 0,
+      stmt = '',
+      instructAgDone = false;
+
+  function random(arr) {
+    let el = arr[Math.floor(Math.random()*arr.length)];
+    return el;
+  }
+
+  function randomNoRepl(arr) {
+    //if (array[0] != undefined) {
+    let el = arr.splice(Math.floor(Math.random()*arr.length), 1);
+    return el[0];
+    //} else {
+      //
+  }  function updateScore() {scoreboard.innerHTML = 'Score: ' + score;}
+
+  function updateData() {
+    agreeData.push({
+      task: currTask,
+      trial: trialNum,
+      statement: stmt.ID,
+      resp: event.key,
+      RT: t2 - t1,
+      ITI: ITI,
+      elapsed: t2 - t0,
+    });
+  }
+
+  function blink(textArray) {
+    if (textArray[0] != undefined) {
+      let cur = textArray.shift();
+      show(cur.text, cur.params);
+      blinkTimeout += cur.dur;
+      setTimeout(blink, cur.dur, textArray);
+    } else {
+      container1.innerHTML = '';
+      return(blinkTimeout);
+    }
+  }
+
+  function show(text, params, useContainer2) {
+    let container = container1;
+    if (useContainer2 == true) container = container2;
+    if (params == undefined) {
+      container.innerHTML = text;
+    } else {
+      let rgb = '', size = '', pos = '';
+      if (params.rgb != undefined) rgb = 'color:rgb(' + params.rgb + ');';
+      if (params.size != undefined) size = 'font-size:' + params.size + ';';
+      if (params.x != undefined || params.y != undefined) {
+        if (params.x == undefined) {
+          pos = 'position:relative; top:' + params.y + ';';
+        } else if (params.y == undefined) {
+          pos = 'position:relative; left:' + params.x + ';';
+        } else {
+          pos = 'position:relative; top:' + params.y + '; left:' + params.x + ';';
+        }
+      }
+      container.innerHTML = '<div style="' + rgb + size + pos + '">' + text + "</div>";
+    }
+  }
+  
+  function finish() {
+    show(JSON.stringify(agreeData), {size:'3px'});
+    console.log(agreeData);
+  }
+
+  function agreeingGame() {
+    const instructions = 'AGREEING GAME v0.9.0<p><div style="font-size:20">press \'a\' when you agree!<br>press the spacebar if you\'re not sure or don\'t agree.<br>Press \'f\' to finish practicing for the day.<p>You\'d like to practice now, Hannah!</div>'
+    const agreeEchoes = [
+      'yes I agree',
+      'yes I agree',
+      'yes I agree',
+      'yes I agree',
+      'yes Casey',
+      'I agree',
+      'thank you Casey',
+      'of course Casey',
+      'of course'
+    ];
+    currTask = 'agree';
+
+    function instructAg() {
+      //populate(statements);
+      container1.innerHTML = instructions;
+      instructAgDone = true;
+      listenerInstAg();
+    }
+
+    function listenerInstAg() {document.addEventListener('keydown', keyPressInstAg, {once:true});}
+    function keyPressInstAg(event) {
+      let resp = event.key.toLowerCase();
+      if (resp == 'a') {
+        container1.innerHTML = '';
+        scoreboard.innerHTML = 'Score: ' + score;
+        setTimeout(nextStmtAg, ITI);
+      } else if (resp == 'f' || resp == ' ') {
+        finish();
+      } else {
+        listenerInstAg();
+      }
+    }
+
+    function nextStmtAg() {
+      trialNum++;
+      stmt = randomNoRepl(statements);
+      show(stmt.text);
+      t1 = performance.now();
+      listenerAg();
+    }
+
+    function listenerAg() {document.addEventListener('keydown', keyPressAg, {once:true});}
+    function keyPressAg(event) {
+      t2 = performance.now();
+      let resp = event.key.toLowerCase();
+      updateData();
+      ITI = random(ITIs);
+      if (resp == 'a') {
+        points += Math.round(Math.random() * 2 + 2);
+        let echo = random(agreeEchoes);
+        blink([
+          {text: echo, dur: 100, params: {rgb:'200,180,200'}},
+          {text: stmt.text, dur: 90},
+          {text: echo, dur: 200, params: {rgb:'200,180,200'}}
+          ]);
+        if (Math.random() > .2 && points < 20) {
+          setTimeout(nextStmtAg, ITI + 390);
+        } else {
+          setTimeout(awardPtsAg, 690);
+        }
+      } else if (resp == 'f') {
+        finish();
+      } else if (resp == ' ') {
+        container1.innerHTML = '';
+        setTimeout(nextStmtAg, ITI);
+      } else {
+        listenerAg();
+      }
+    }
+    
+    function awardPtsAg() {
+      let praise = 'good girl!';
+      if (Math.random() < .25) praise = 'you\'re a good girl';
+      let alertPoints = '+' + points;
+      score += points;
+      points = 0;
+      twotone.play();
+      updateScore();
+      blink([
+        {text: praise, dur: 300, params: {rgb: '220,208,255', y:'-50px'}},
+        {text: '', dur: 100},
+        {text: praise, dur: 100, params: {rgb: '220,208,255', y:'-50px'}},
+        {text: '', dur: 200},
+        {text: alertPoints, dur: 300, params: {rgb: '255,207,64', y:'-50px'}}
+      ]);
+      if (score < 300) {
+        setTimeout(nextStmtAg, ITI + 1000);
+      } else {
+        setTimeout(transAgCl1, 2000);
+      }
+    }
+
+    function transAgCl1() {
+      blink([{text: '300 points!', dur: 150, params: {y: '-50px', size: '30px', rgb:'255,207,64'}},
+        {text: '', dur: 150},
+        {text: '300 points!', dur: 75, params: {y: '-50px', size: '30px', rgb:'255,207,64'}},
+        {text: '', dur: 150},
+        {text: '300 points!', dur: 400, params: {y: '-50px', size: '30px', rgb:'255,207,64'}},
+        {text: '', dur: 500},
+        {text: '(you\'re so good at agreeing, Hannah ^_^)', dur: 800, params: {y: '-50px', rgb:'220,208,255'}},
+//        {text: 'completely without thinking', dur: 120, rgb:'200,180,200'},
+//        {text: '(you\'re so good at agreeing, Hannah ^_^)', dur: 150, params: {rgb:'220,208,255'}},
+        {text: '', dur: 2000},
+        {text: '<img src="pics/clock.png">', dur: 50},
+        {text: '', dur: 50},
+        {text: '<img src="pics/clock.png">', dur: 50}
+      ]);
+      setTimeout(transAgCl2, 4425);
+    }
+
+    function transAgCl2() {
+      show('you\'re curious and excited to try the <span style="color:rgb(255,207,64)">clockwork game,</span> you agree!');
+      document.addEventListener('keydown', function(event) {
+        if (event.key.toLowerCase() == 'a') {
+          twotone.play();
+          blink([
+            {text: 'yes Casey I agree', dur: 150, params: {rgb:'200,180,200'}},
+            {text: '', dur: 100},
+            {text: 'good girl!', dur: 300, params: {rgb:'200,180,200'}},
+            {text: '', dur: 50},
+            {text: 'good girl!', dur: 100, params: {rgb:'200,180,200'}},
+            {text: '', dur: 50},
+            {text: 'good girl, Hannah!', dur: 800, params: {rgb:'200,180,200'}}
+          ]);
+          setTimeout(transAgCl3, 2050);
+        } else {
+          transAgCl2();
+        }
+      }, {once:true});
+    }
+
+    function transAgCl3() {
+      windup.play();
+      blink([
+        {text: '5', dur: 900, params: {size:'30px'}},
+        {text: '<img src="pics/clock.png">', dur: 100},
+        {text: '4', dur: 900, params: {size:'30px'}},
+        {text: '<img src="pics/clock.png">', dur: 100},
+        {text: '3', dur: 900, params: {size:'30px'}},
+        {text: '<img src="pics/clock.png">', dur: 100},
+        {text: '2', dur: 900, params: {size:'30px'}},
+        {text: '<img src="pics/clock.png">', dur: 100},
+        {text: '1', dur: 900, params: {size:'30px'}},
+        {text: '<img src="pics/clock.png">', dur: 100},
+        {text: '', dur: 100},
+        {text: '<img src="pics/clock.png">', dur: 300},
+        {text: '', dur: 100},
+        {text: '<img src="pics/clock.png">', dur: 100}
+      ]);
+      setTimeout(clockGame, 6000);
+    }
+
+    if (!instructAgDone) {
+      instructAg();
+    } else {
+      nextStmtAg();
+    }
+  }
+
+  function clockGame() {
+    const clockTop = {y: '100px', cor: 'y', echo: 'yes Casey', prompt: '"yes Casey" (y)'},
+          clockBtm = {y: '-100px', cor: 'a', echo: 'I agree', prompt: '"I agree" (a)'};
+    let clock = {y: '', cor: '', echo: ''},
+        trialNum = 0,
+        tickTock = 1,
+        tickRate = 1000,
+        tickStop = 0,
+        tTick,
+        tickAcc;
+
+    function nextStmtCl() {
+      trialNum++;
+      stmt = randomNoRepl(statements);
+      if (clock.cor == 'y') {
+        Object.assign(clock, clockBtm);
+      } else {
+        Object.assign(clock, clockTop);
+      }
+      show(stmt.text, clock, true);
+      listenerCl();
+    }
+
+    function listenerCl() {document.addEventListener('keydown', keyPressCl, {once:true});}
+    function keyPressCl(event) {
+      container1.innerHTML = '';
+      t2 = performance.now();
+      tickAcc = (tickRate/2) - Math.abs((t2 - tTick - 35) - (tickRate/2));
+      let resp = event.key.toLowerCase();
+      if (resp == clock.cor) {
+        if (tickAcc < tickRate * .1) {
+          score ++;
+          updateScore();
+          blink([
+            {text: clock.echo, dur: 150, params: {rgb: '200,180,200'}},
+            {text: '', dur: 150},
+            {text: '+1', dur: 150, params: {rgb: '255,207,64'}},
+          ]);
+        }
+        nextStmtCl();
+      } else if (resp == 'a' || resp == 'y') {
+        show (clock.prompt, {rgb: '200,180,200'});
+        listenerCl();
+      } else if (resp == 'f') {
+        tickStop = 1;
+        container2.innerHTML = '';
+        finish();
+      } else if (resp == ' ') {
+        nextStmtCl();
+      } else {
+        listenerCl();
+      }
+    }
+
+    function tickTockCl() {
+      if (!tickStop) {
+        tickTock ^= 1;
+        if (trialNum > 25 && tickRate < 3000) tickRate *= 1.009;
+        if (!tickTock) {
+          tick.play();
+        } else {
+          tock.play();
+        }
+        tTick = performance.now();
+        setTimeout(tickTockCl, tickRate);
+      } else {
+        tickStop = 0;
+        return;
+      }
+    }
+    
+    windup.pause();
+    tickTockCl();
+    nextStmtCl();
+  }
+
+  //fix - 'it feels so good obey and go blank'
+  //sometimes seemed to be two statements displayed in quick succession in clock game
+
+  agreeingGame();
+  //clockGame();
+
+})();
+</script>
