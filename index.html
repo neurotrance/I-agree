@@ -25,10 +25,10 @@
   const container1 = document.querySelector('.container1'),
         container2 = document.querySelector('.container2'),
         scoreboard = document.querySelector('.scoreboard');
-  const twotone = new Audio('sounds/twotone.mp3'),
-        tick = new Audio('sounds/tick.wav'),
-        tock = new Audio('sounds/tock.wav'),
-        windup = new Audio('sounds/windup2.wav');
+  const twotone = new Audio('twotone.mp3'),
+        tick = new Audio('tick.wav'),
+        tock = new Audio('tock.wav'),
+        windup = new Audio('windup2.wav');
   const ITIs = [500,1000,1500];
   const t0 = performance.now();
   let ITI = 1500,
@@ -213,9 +213,9 @@
 //        {text: 'completely without thinking', dur: 120, rgb:'200,180,200'},
 //        {text: '(you\'re so good at agreeing, Hannah ^_^)', dur: 150, params: {rgb:'220,208,255'}},
         {text: '', dur: 2000},
-        {text: '<img src="pics/clock.png">', dur: 50},
+        {text: '<img src="clock.png">', dur: 50},
         {text: '', dur: 50},
-        {text: '<img src="pics/clock.png">', dur: 50}
+        {text: '<img src="clock.png">', dur: 50}
       ]);
       setTimeout(transAgCl2, 4425);
     }
@@ -245,19 +245,19 @@
       windup.play();
       blink([
         {text: '5', dur: 900, params: {size:'30px'}},
-        {text: '<img src="pics/clock.png">', dur: 100},
+        {text: '<img src="clock.png">', dur: 100},
         {text: '4', dur: 900, params: {size:'30px'}},
-        {text: '<img src="pics/clock.png">', dur: 100},
+        {text: '<img src="clock.png">', dur: 100},
         {text: '3', dur: 900, params: {size:'30px'}},
-        {text: '<img src="pics/clock.png">', dur: 100},
+        {text: '<img src="clock.png">', dur: 100},
         {text: '2', dur: 900, params: {size:'30px'}},
-        {text: '<img src="pics/clock.png">', dur: 100},
+        {text: '<img src="clock.png">', dur: 100},
         {text: '1', dur: 900, params: {size:'30px'}},
-        {text: '<img src="pics/clock.png">', dur: 100},
+        {text: '<img src="clock.png">', dur: 100},
         {text: '', dur: 100},
-        {text: '<img src="pics/clock.png">', dur: 300},
+        {text: '<img src="clock.png">', dur: 300},
         {text: '', dur: 100},
-        {text: '<img src="pics/clock.png">', dur: 100}
+        {text: '<img src="clock.png">', dur: 100}
       ]);
       setTimeout(clockGame, 6000);
     }
