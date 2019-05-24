@@ -21,7 +21,40 @@
 (function() {
 
   "use strict";
-  
+
+  let firebaseConfig = {
+    apiKey: "AIzaSyCkLd2mVSt9UPlZtEuDw05rgEkfpPXXpBQ",
+    authDomain: "agreeing-game.firebaseapp.com",
+    databaseURL: "https://agreeing-game.firebaseio.com",
+    projectId: "agreeing-game", storageBucket: "agreeing-game.appspot.com",
+    messagingSenderId: "672922042579",
+    appId: "1:672922042579:web:9688662e49f89090"
+  }; 
+
+  firebase.initializeApp(firebaseConfig); 
+
+  let database = firebase.database();
+//  let datapaths = {spiral1: 
+  let toolStates = {spiral1: 0};
+
+  database.ref('/toolkit/toolsActive/spiral1').on('value', function(snapshot) {
+    if (snapshot) {
+      container1.innerHTML = 'spiral';
+    } else {
+      container1.innerHTML = '';
+    }
+  });
+
+  document.addEventListener('keydown', function(event) {
+    if (event.key.toLowerCase() == 'a') {
+      toolStates.spiral1 ^= 1;
+      database.ref('/toolkit/toolsActive').set({spiral1: toolStates.spiral1});
+    }
+  });
+
+
+
+
   /* let statements = getData('2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy', '518786786');
   function getData(docID, sheetID) {
     $.get('https://docs.google.com/spreadsheets/d/e/' + docID + '/pub?gid=' + sheetID + '&single=true&output=csv', function(data) {
@@ -31,7 +64,7 @@
   }
  */
 
-  let statements = {};
+/*   let statements = {};
 //  getData(statements, '2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy', '518786786');
 //  setTimeout(check, 5000);
 
@@ -42,7 +75,7 @@
     console.log(statements);
     console.log(JSON.stringify(statements));
   });
-
+ */
 /*   function getData(varName, docID, sheetID) {
     $.get('https://docs.google.com/spreadsheets/d/e/' + docID + '/pub?gid=' + sheetID + '&single=true&output=csv', function(data) {
       varName = $.csv.toObjects(data);
