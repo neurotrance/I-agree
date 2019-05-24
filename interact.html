@@ -45,6 +45,7 @@
   let toolStates = {spiral1: 0};
 
   toolsActive.onSnapshot(function(doc) {
+    console.log('snapshot listener triggered');
     if (doc.spiral1) {
       container1.innerHTML = 'spiral';
     } else {
@@ -53,9 +54,12 @@
   });
 
   document.addEventListener('keydown', function(event) {
+    console.log('keypress listener triggered');
     if (event.key.toLowerCase() == 'a') {
       toolStates.spiral1 ^= 1;
-      toolsActive.update({spiral1: toolStates.spiral1});
+      toolsActive.update({spiral1: toolStates.spiral1})
+      .then(function() {console.log('update attempted & successful');})
+      .catch(function() {console.log('update attempted & failed');});
     }
   });
 
