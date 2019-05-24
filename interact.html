@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>    
+<head>
+  <style>
+    html{height:100%}
+    body{color:white; background-color:black; font-size:24px; font-family:"Arial"; min-height:100%; overflow:none; display:flex; justify-content:center;}
+    .container1{position:absolute; align-self:center; overflow:none; margin:0px; padding:0px; text-align:center; align-items:center; justify-content:center;}
+    .container2{position:absolute; align-self:center; overflow:none; margin:0px; padding:0px; text-align:center; align-items:center; justify-content:center;}
+    .scoreboard{color:rgb(143, 143, 199); font-size:20px; position:absolute; top:0px; right:0px; overflow:none; margin:0px; padding-top:3em; padding-right:3em;}
+  </style>
+</head>
+<body>
+  <div class="container1"></div>
+  <div class="container2"></div>
+  <div class="scoreboard"></div></body>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.csv.js"></script>
+<script src="js/statements.js"></script>
+<script>
+
+(function() {
+
+  "use strict";
+  
+  let statements = getData(varName, '2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy', '518786786');
+
+  function getData(docID, sheetID) {
+    $.get('https://docs.google.com/spreadsheets/d/e/' + docID + '/pub?gid=' + sheetID + '&single=true&output=csv', function(data) {
+      return $.csv.toObjects(data);
+    });
+  }
+
+  console.log(statements);
+  conosle.log(JSON.stringify(statements));
+  
+
+  })();
+</script>
