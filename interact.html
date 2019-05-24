@@ -46,6 +46,7 @@
 
   toolsActive.onSnapshot(function(doc) {
     console.log('snapshot listener triggered');
+    console.log('firebase toolsActive =  ' + doc);
     console.log('firebase spiral1 value = ' + doc.spiral1);
     if (doc.spiral1) {
       container1.innerHTML = 'spiral';
