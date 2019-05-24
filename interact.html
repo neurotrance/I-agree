@@ -12,9 +12,22 @@
 <body>
   <div class="container1"></div>
   <div class="container2"></div>
-  <div class="scoreboard"></div></body>
+  <div class="scoreboard"></div>
+</body>
 <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
+<script>
+  var firebaseConfig = {
+    apiKey: "AIzaSyCkLd2mVSt9UPlZtEuDw05rgEkfpPXXpBQ",
+    authDomain: "agreeing-game.firebaseapp.com",
+    databaseURL: "https://agreeing-game.firebaseio.com",
+    projectId: "agreeing-game",
+    storageBucket: "agreeing-game.appspot.com",
+    messagingSenderId: "672922042579",
+    appId: "1:672922042579:web:9688662e49f89090"
+  };
+  firebase.initializeApp(firebaseConfig);
+</script>
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery.csv.js"></script>
 <script src="js/statements.js"></script>
@@ -24,6 +37,8 @@
 
   "use strict";
 
+
+  /* 
   let firebaseConfig = {
     apiKey: "AIzaSyCkLd2mVSt9UPlZtEuDw05rgEkfpPXXpBQ",
     authDomain: "agreeing-game.firebaseapp.com",
@@ -34,7 +49,7 @@
   }; 
 
   firebase.initializeApp(firebaseConfig); 
-
+ */
   let database = firebase.database();
 //  let datapaths = {spiral1: 
   let toolStates = {spiral1: 0};
