@@ -31,11 +31,19 @@
   }
  */
 
-  let statements;
-  getData(statements, '2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy', '518786786');
-  setTimeout(check, 5000);
+  let statements = {};
+//  getData(statements, '2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy', '518786786');
+//  setTimeout(check, 5000);
 
-  function getData(varName, docID, sheetID) {
+
+  $.get('https://docs.google.com/spreadsheets/d/e/2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy/pub?gid=518786786&single=true&output=csv', function(data) {
+    console.log(data);
+    statements = $.csv.toObjects(data);
+    console.log(statements);
+    console.log(JSON.stringify(statements));
+  });
+
+/*   function getData(varName, docID, sheetID) {
     $.get('https://docs.google.com/spreadsheets/d/e/' + docID + '/pub?gid=' + sheetID + '&single=true&output=csv', function(data) {
       varName = $.csv.toObjects(data);
     });
@@ -45,7 +53,7 @@
     console.log(statements);
     console.log(JSON.stringify(statements));
   }
-
+ */
 
   })();
 </script>
