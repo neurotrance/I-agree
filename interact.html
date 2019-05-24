@@ -14,7 +14,7 @@
   <div class="container2"></div>
   <div class="scoreboard"></div>
 <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-firestore.js"></script>
 <script>
   var firebaseConfig = {
     apiKey: "AIzaSyCkLd2mVSt9UPlZtEuDw05rgEkfpPXXpBQ",
@@ -39,24 +39,13 @@
   "use strict";
 
 
-  /* 
-  let firebaseConfig = {
-    apiKey: "AIzaSyCkLd2mVSt9UPlZtEuDw05rgEkfpPXXpBQ",
-    authDomain: "agreeing-game.firebaseapp.com",
-    databaseURL: "https://agreeing-game.firebaseio.com",
-    projectId: "agreeing-game", storageBucket: "agreeing-game.appspot.com",
-    messagingSenderId: "672922042579",
-    appId: "1:672922042579:web:9688662e49f89090"
-  }; 
-
-  firebase.initializeApp(firebaseConfig); 
- */
-  let database = firebase.database();
-//  let datapaths = {spiral1: 
+  let dbRoot = firebase.firestore();
+  let toolkit = dbRoot.collection("toolkit");
+  let toolsActive = toolkit.doc("toolsActive")
   let toolStates = {spiral1: 0};
 
-  database.ref('/toolkit/toolsActive/spiral1').on('value', function(snapshot) {
-    if (snapshot) {
+  toolsActive.onSnapshot(function(doc) {
+    if (doc.spiral1) {
       container1.innerHTML = 'spiral';
     } else {
       container1.innerHTML = '';
@@ -66,7 +55,7 @@
   document.addEventListener('keydown', function(event) {
     if (event.key.toLowerCase() == 'a') {
       toolStates.spiral1 ^= 1;
-      database.ref('/toolkit/toolsActive').set({spiral1: toolStates.spiral1});
+      toolsActive.update({spiral1: toolStates.spiral1});
     }
   });
 
