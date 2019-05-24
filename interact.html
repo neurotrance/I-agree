@@ -22,12 +22,22 @@
 
   "use strict";
   
-  let statements = getData('2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy', '518786786');
-
+  /* let statements = getData('2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy', '518786786');
   function getData(docID, sheetID) {
     $.get('https://docs.google.com/spreadsheets/d/e/' + docID + '/pub?gid=' + sheetID + '&single=true&output=csv', function(data) {
       return $.csv.toObjects(data);
       check();
+    });
+  }
+ */
+
+  let statements;
+  getData(statements, '2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy', '518786786');
+  setTimeout(check, 5000);
+
+  function getData(varName, docID, sheetID) {
+    $.get('https://docs.google.com/spreadsheets/d/e/' + docID + '/pub?gid=' + sheetID + '&single=true&output=csv', function(data) {
+      varName = $.csv.toObjects(data);
     });
   }
 
