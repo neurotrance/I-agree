@@ -27,11 +27,14 @@
   function getData(docID, sheetID) {
     $.get('https://docs.google.com/spreadsheets/d/e/' + docID + '/pub?gid=' + sheetID + '&single=true&output=csv', function(data) {
       return $.csv.toObjects(data);
+      check();
     });
   }
 
-  console.log(statements);
-  console.log(JSON.stringify(statements));
+  function check() {
+    console.log(statements);
+    console.log(JSON.stringify(statements));
+  }
 
 
   })();
