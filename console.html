@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>    
+<head>
+  <!-- <style src="css/precision-inputs.base.css"></style> -->
+  <style src="css/precision-inputs.fl-controls.css"></style>
+  <style>
+    html{height:100%}
+    body{color:white; background-color:black; font-size:24px; font-family:"Arial"; min-height:100%; overflow:none; display:flex; justify-content:center;}
+    .container1{position:absolute; align-self:center; overflow:none; margin:0px; padding:0px; text-align:center; align-items:center; justify-content:center;}
+    .container2{position:absolute; align-self:center; overflow:none; margin:0px; padding:0px; text-align:center; align-items:center; justify-content:center;}
+    .scoreboard{color:rgb(143, 143, 199); font-size:20px; position:absolute; top:0px; right:0px; overflow:none; margin:0px; padding-top:3em; padding-right:3em;}
+  </style>
+</head>
+<body>
+  <div class="my-fl-knob" style="width:60px; height:60px"></div>
+  <div class="container1"></div>
+  <div class="container2"></div>
+  <div class="scoreboard"></div>
+</body>
+<script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-firestore.js"></script>
+<script>
+  var firebaseConfig = {
+    apiKey: "AIzaSyCkLd2mVSt9UPlZtEuDw05rgEkfpPXXpBQ",
+    authDomain: "agreeing-game.firebaseapp.com",
+    databaseURL: "https://agreeing-game.firebaseio.com",
+    projectId: "agreeing-game",
+    storageBucket: "agreeing-game.appspot.com",
+    messagingSenderId: "672922042579",
+    appId: "1:672922042579:web:9688662e49f89090"
+  };
+  firebase.initializeApp(firebaseConfig);
+</script>
+<!-- <script src="js/jquery.min.js"></script>
+<script src="js/jquery.csv.js"></script>
+<script src="js/statements.js"></script> -->
+<!-- <script src="js/precision-inputs.base.js"></script> -->
+<script src="js/precision-inputs.fl-controls.js"></script>
+<script>
+
+
+(function() {
+
+  "use strict";
+
+ 
+
+  let myKnobContainer = document.querySelector('.my-fl-knob');
+  let myKnob = new PrecisionInputs.FLStandardKnob(myKnobContainer);
+  let container1 = document.querySelector('.container1');
+  let dbRoot = firebase.firestore();
+  let toolkit = dbRoot.collection('toolkit');
+  let toolsActive = toolkit.doc('toolsActive');
+  let toolStates = {spiral1: 0};
+  let noise = new Audio('audio/noise.mp3');
+  let binaural = new Audio('audio/binbeat.mp3');
+  let musicbox = new Audio('audio/musicbox.mps3');
+
+
+
+  toolsActive.onSnapshot(function(doc) {
+    let spiral1State = doc.get('spiral1');
+    if (spiral1State) {
+      container1.innerHTML = 'spiral';
+    } else {
+      container1.innerHTML = '';
+    }
+  });
+
+  document.addEventListener('keydown', function(event) {
+    console.log('keypress listener triggered');
+    if (event.key.toLowerCase() == 'a') {
+      toolStates.spiral1 ^= 1;
+      toolsActive.update({spiral1: toolStates.spiral1})
+      // .then(function() {console.log('update attempted & successful');})
+      // .catch(function() {console.log('update attempted & failed');});
+    }
+  });
+
+
+
+
+  /* let statements = getData('2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy', '518786786');
+  function getData(docID, sheetID) {
+    $.get('https://docs.google.com/spreadsheets/d/e/' + docID + '/pub?gid=' + sheetID + '&single=true&output=csv', function(data) {
+      return $.csv.toObjects(data);
+      check();
+    });
+  }
+ */
+
+/*   let statements = {};
+//  getData(statements, '2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy', '518786786');
+//  setTimeout(check, 5000);
+
+
+  $.get('https://docs.google.com/spreadsheets/d/e/2PACX-1vTEhAbNg63mnQFCBCPpuhwGU9KU1MnvvESo-UGzwyBFp1qW2A0K9Lccqr0FwlpI9ggECkZPpfdZoWZy/pub?gid=518786786&single=true&output=csv', function(data) {
+    console.log(data);
+    statements = $.csv.toObjects(data);
+    console.log(statements);
+    console.log(JSON.stringify(statements));
+  });
+ */
+/*   function getData(varName, docID, sheetID) {
+    $.get('https://docs.google.com/spreadsheets/d/e/' + docID + '/pub?gid=' + sheetID + '&single=true&output=csv', function(data) {
+      varName = $.csv.toObjects(data);
+    });
+  }
+
+  function check() {
+    console.log(statements);
+    console.log(JSON.stringify(statements));
+  }
+ */
+
+  })();
+</script>
