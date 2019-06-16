@@ -9,13 +9,13 @@
   background: radial-gradient(#777, #000 50%);
 } */
 
-.sizer{
+/* .sizer{
   /* transform: scale(2);
-  transform-origin: 0 0; */
+  transform-origin: 0 0; 
   display:flex;
   justify-content:center;
   align-content:center;
-}
+} */
 
 .m-container {
   position: relative;
@@ -31,7 +31,10 @@
   position: absolute;
   top: 11px;
   left: calc(50% - 1px);
-  animation: metronome .75s ease-in-out infinite alternate-reverse;
+  transform: rotate(35deg);
+  /* animation: metronome ease-in-out infinite alternate-reverse;
+  animation-play-state: paused;
+  animation-duration: 1s; */
   transform-origin: 50% 100%;
   background: linear-gradient(to bottom, #929292, #676767);
 }
@@ -89,12 +92,12 @@
   top: 5%;
 }
 
-@keyframes metronome {
+/* @keyframes metronome {
     0% {
-      transform: rotate(35deg);
-    }
-    100% {
       transform: rotate(-35deg);
     }
+    100% {
+      transform: rotate(35deg);
+    }
   }
-  
+   */
