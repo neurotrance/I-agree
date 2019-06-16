@@ -36,6 +36,7 @@
   audFeedMode.monitor = document.getElementById('audMonitor');
   audFeedMode.preview = document.getElementById('audPreview');
   audFeedMode.off = document.getElementById('audFeedOff');
+  let visFeed = document.getElementById('visFeed');
 
 
 /////////////////////
@@ -105,9 +106,9 @@
   tone1TremType.new.onchange = tremTypeSelect;
   audExecute.onclick = audChange;
   // audReset.onclick = audResetExec;
-  visFeedMode.monitor.onclick = visMonitorOn;
+  // visFeedMode.monitor.onclick = visMonitorOn;
   // visFeedMode.preview.onclick = visPreviewOn;
-  visFeedMode.off.onclick = visFeedOff;
+  // visFeedMode.off.onclick = visFeedOff;
   audFeedMode.monitor.onclick = audMonitorOn;
   audFeedMode.preview.onclick = audPreviewOn;
   audFeedMode.off.onclick = audFeedOff;
@@ -128,14 +129,17 @@
 
   function audMonitorOn() {
     Tone.Master.mute = true;
+    visFeed.src = 'display.html';
   }
 
   function audPreviewOn() {
     Tone.Master.mute = false;
+    visFeed.src = 'blank.html';
   }
 
   function audFeedOff() {
     Tone.Master.mute = true;
+    visFeed.src = 'blank.html';
   }
 
 
