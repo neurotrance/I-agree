@@ -433,7 +433,7 @@
       'on': tone1Toggle.on.checked,
       'volume': tone1Vol.slider.valueAsNumber,
       'freq': tone1Freq.slider.valueAsNumber ** freqExp,
-      'trem.on': tone1TremToggle.checked,
+      'trem.on': tone1TremToggle.on.checked,
       'trem.freq': 2 * (10 ** tone1TremFreq.slider.valueAsNumber),
       'trem.spread': tone1TremSpread.slider.valueAsNumber * 1.8,
       'trem.type': tone1TremType.selected
