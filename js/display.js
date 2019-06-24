@@ -77,6 +77,15 @@
   //     musicBox: false
   // }
   let gifDisplay;
+  let volSlider = document.getElementById('volSlider');
+
+  volSlider.oninput = changeVol;
+
+  function changeVol() {
+    console.log('run');
+    Tone.Master.volume.value = volSlider.valueAsNumber;
+  }
+
 
   dbVisuals.onSnapshot(visUpdate);
   // dbAudio.onSnapshot(audUpdate);
