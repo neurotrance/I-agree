@@ -77,14 +77,14 @@
   //     musicBox: false
   // }
   let gifDisplay;
-  let volSlider = document.getElementById('volSlider');
+  // let volSlider = document.getElementById('volSlider');
 
-  volSlider.oninput = changeVol;
+  // volSlider.oninput = changeVol;
 
-  function changeVol() {
-    console.log('run');
-    Tone.Master.volume.value = volSlider.valueAsNumber;
-  }
+  // function changeVol() {
+  //   console.log('run');
+  //   Tone.Master.volume.value = volSlider.valueAsNumber;
+  // }
 
 
   dbVisuals.onSnapshot(visUpdate);
