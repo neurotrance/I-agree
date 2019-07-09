@@ -1,7 +1,7 @@
 (function() {
 
   "use strict";
-  
+
   let dbRoot = firebase.firestore();
   let db = dbRoot.collection('toolkit');
   let dbVisuals = db.doc('visuals');
@@ -13,21 +13,17 @@
   let visDelta = new Control('visDelta');
   let visStim = new Control('visStim');
   let noiseVol = new Control('noiseVol');
-  let tone1Vol = new Control('tone1Vol');
-  let tone1Freq = new Control('tone1Freq');
-  let tone1TremType = new Control('tone1TremType');
-  tone1TremType.selected = 'none';
-  let tone1TremFreq = new Control('tone1TremFreq');
-  let tone1TremSpread = new Control('tone1TremSpread');
+  let noiseTremType = new Control('noiseTremType');
+  noiseTremType.selected = 'sine';
+  let noiseTremFreq = new Control('noiseTremFreq');
+  let noiseTremSpread = new Control('noiseTremSpread');
+
   let noiseToggle = {};
   noiseToggle.on = document.getElementById('noiseOn');
   noiseToggle.off = document.getElementById('noiseOff');
-  let tone1Toggle = {};
-  tone1Toggle.on = document.getElementById('tone1On');
-  tone1Toggle.off = document.getElementById('tone1Off');
-  let tone1TremToggle = {};
-  tone1TremToggle.on = document.getElementById('tone1TremOn');
-  tone1TremToggle.off = document.getElementById('tone1TremOff');
+  let noiseTremToggle = {};
+  noiseTremToggle.on = document.getElementById('noiseTremOn');
+  noiseTremToggle.off = document.getElementById('noiseTremOff');
   let visFeedMode = {};
   visFeedMode.monitor = document.getElementById('visMonitor');
   visFeedMode.preview = document.getElementById('visPreview');
@@ -40,13 +36,14 @@
 
 
 /////////////////////
-  let noiseEnv = new Tone.AmplitudeEnvelope(.1,.2,1,.8).toMaster();
-  let noise = new Tone.Noise('brown').connect(noiseEnv);
-  let tone1Env = new Tone.AmplitudeEnvelope(.1,.2,1,.8).toMaster();
-  let tone1Trem = new Tone.Tremolo(4, 1).connect(tone1Env);
-  tone1Trem.wet.value = 1;
-  let tone1 = new Tone.Oscillator(440, 'sine').connect(tone1Trem);
-/////////////////////
+  let noiseEnv = new Tone.AmplitudeEnvelope(.2,.2,1,.8).toMaster();
+  let noiseTrem = new Tone.Tremolo(4, 1).connect(noiseEnv);
+  noiseTrem.wet.value = 1;
+  let noise = new Tone.Noise('brown').connect(noiseTrem);
+
+
+  /////////////////////
+  let master1 = new Control('master1');
 
   // let musicBoxVol = new Control('musicBoxVol');
   // let musicBoxRate = new Control('musicBoxRate');
@@ -60,6 +57,8 @@
   let audReset = document.getElementById('audReset');
   let snapBtn = document.getElementById('snap');
   let pointsBtn = document.getElementById('points');
+  // let wordsToggle = document.getElementById('words');
+
   // let noiseToggle = document.getElementById("noiseToggle");
       // noise1Pan = document.getElementById("noisePan");
   // let tone1Toggle = document.getElementById("tone1Toggle");
@@ -88,24 +87,24 @@
   noiseToggle.on.onclick = noiseOn;
   noiseToggle.off.onclick = noiseOff;
   noiseVol.slider.oninput = noiseVolChange;
-  tone1Toggle.on.onclick = tone1On;
-  tone1Toggle.off.onclick = tone1Off;
-  tone1TremToggle.on.onclick = tone1TremOn;
-  tone1TremToggle.off.onclick = tone1TremOff;
-  tone1Vol.slider.oninput = tone1VolChange;
-  tone1Freq.slider.oninput = tone1FreqChange;
-  tone1TremFreq.slider.oninput = tone1TremFreqChange;
-  tone1TremSpread.slider.oninput = tone1TremSpreadChange;
+  // master1.slider.oninput = master1Change;
+
+  noiseTremToggle.on.onclick = noiseTremOn;
+  noiseTremToggle.off.onclick = noiseTremOff;
+  noiseTremFreq.slider.oninput = noiseTremFreqChange;
+  noiseTremSpread.slider.oninput = noiseTremSpreadChange;
   // tone2VolSlider.onchange = tone2Change;
   // tone2Toggle.onclick = tone2Change;
   // tone2FreqSlider.onchange = tone2Change;
   // musicBoxToggle.onclick = musicBoxChange;
   // musicBoxVol.slider.onchange = musicBoxChange;
   gallery.onclick = pickVis;
+  // wordsToggle.onclick = wordsChange;
 
-  tone1TremType.new.onchange = tremTypeSelect;
+
   audExecute.onclick = audChange;
-  // audReset.onclick = audResetExec;
+  noiseTremType.new.onchange = noiseTremTypeSelect;
+  audReset.onclick = audResetExec;
   // visFeedMode.monitor.onclick = visMonitorOn;
   // visFeedMode.preview.onclick = visPreviewOn;
   // visFeedMode.off.onclick = visFeedOff;
@@ -176,6 +175,69 @@
     noise.volume.value = noiseVol.slider.valueAsNumber;
   }
 
+  function master1Change() {
+    master1.value = master1.slider.valueAsNumber;
+    controls.forEach((ctl) => {
+      if (ctl.yoked1) {
+        ctl.slider.value = (master1.value * (ctl.slider.max - ctl.slider.min)) + ctl.slider.min;
+      }
+    });
+  }
+  
+  function noiseTremOn() {
+    noiseTrem.frequency.value = 2 * (10 ** noiseTremFreq.slider.valueAsNumber);
+    noiseTrem.spread = noiseTremSpread.slider.valueAsNumber * 1.8;
+    noiseTrem.start();
+  }
+
+  function noiseTremOff() {
+    noiseTrem.stop();
+  }
+
+  function noiseTremFreqChange() {
+    noiseTrem.frequency.value = 2 * (10 ** noiseTremFreq.slider.valueAsNumber);
+  }
+
+  function noiseTremSpreadChange() {
+    noiseTrem.spread = noiseTremSpread.slider.valueAsNumber * 1.8;
+  }
+
+
+  function noiseTremTypeSelect(ev) {
+    noiseTrem.type = ev.target.value;
+    noiseTremType.selected = ev.target.value;
+    }
+
+
+  
+  let tone1Vol = new Control('tone1Vol');
+  let tone1Freq = new Control('tone1Freq');
+  let tone1TremType = new Control('tone1TremType');
+  tone1TremType.selected = 'sine';
+  let tone1TremFreq = new Control('tone1TremFreq');
+  let tone1TremSpread = new Control('tone1TremSpread');
+  let tone1Toggle = {};
+  tone1Toggle.on = document.getElementById('tone1On');
+  tone1Toggle.off = document.getElementById('tone1Off');
+  let tone1TremToggle = {};
+  tone1TremToggle.on = document.getElementById('tone1TremOn');
+  tone1TremToggle.off = document.getElementById('tone1TremOff');
+  let tone1Env = new Tone.AmplitudeEnvelope(.2,.2,1,.8).toMaster();
+  let tone1Trem = new Tone.Tremolo(4, 1).connect(tone1Env);
+  tone1Trem.wet.value = 1;
+  let tone1 = new Tone.Oscillator(440, 'sine').connect(tone1Trem);
+  tone1Toggle.on.onclick = tone1On;
+  tone1Toggle.off.onclick = tone1Off;
+  tone1TremToggle.on.onclick = tone1TremOn;
+  tone1TremToggle.off.onclick = tone1TremOff;
+  tone1Vol.slider.oninput = tone1VolChange;
+  // tone1Freq.slider.onchange = tone1FreqChange;
+  tone1Freq.slider.oninput = tone1FreqChange;
+
+  tone1TremFreq.slider.oninput = tone1TremFreqChange;
+  tone1TremSpread.slider.oninput = tone1TremSpreadChange;
+  tone1TremType.new.onchange = tone1TremTypeSelect;
+
 
   function tone1On() {
     if (tone1.state != 'started') {
@@ -224,10 +286,93 @@
   }
   
   
-  function tremTypeSelect(ev) {
+  function tone1TremTypeSelect(ev) {
     tone1Trem.type = ev.target.value;
     tone1TremType.selected = ev.target.value;
     }
+
+
+  
+    let tone2Vol = new Control('tone2Vol');
+    let tone2Freq = new Control('tone2Freq');
+    let tone2TremType = new Control('tone2TremType');
+    tone2TremType.selected = 'sine';
+    let tone2TremFreq = new Control('tone2TremFreq');
+    let tone2TremSpread = new Control('tone2TremSpread');
+    let tone2Toggle = {};
+    tone2Toggle.on = document.getElementById('tone2On');
+    tone2Toggle.off = document.getElementById('tone2Off');
+    let tone2TremToggle = {};
+    tone2TremToggle.on = document.getElementById('tone2TremOn');
+    tone2TremToggle.off = document.getElementById('tone2TremOff');
+    let tone2Env = new Tone.AmplitudeEnvelope(.2,.2,1,.8).toMaster();
+    let tone2Trem = new Tone.Tremolo(4, 1).connect(tone2Env);
+    tone2Trem.wet.value = 1;
+    let tone2 = new Tone.Oscillator(440, 'sine').connect(tone2Trem);
+    tone2Toggle.on.onclick = tone2On;
+    tone2Toggle.off.onclick = tone2Off;
+    tone2TremToggle.on.onclick = tone2TremOn;
+    tone2TremToggle.off.onclick = tone2TremOff;
+    tone2Vol.slider.oninput = tone2VolChange;
+    tone2Freq.slider.oninput = tone2FreqChange;
+    tone2TremFreq.slider.oninput = tone2TremFreqChange;
+    tone2TremSpread.slider.oninput = tone2TremSpreadChange;
+    tone2TremType.new.onchange = tone2TremTypeSelect;
+  
+  
+    function tone2On() {
+      if (tone2.state != 'started') {
+        tone2.volume.value = tone2Vol.slider.valueAsNumber;
+        tone2.frequency.value = tone2Freq.slider.valueAsNumber ** freqExp;
+        tone2.start();
+        tone2Env.triggerAttack();
+      }
+    }
+  
+    function tone2Off() {
+      if (tone2.state == 'started') {
+        tone2Env.triggerRelease();
+        setTimeout(tone2Stop, 500);
+      }
+    }
+  
+    function tone2Stop() {
+      tone2.stop();
+    }
+    
+    function tone2TremOn() {
+      tone2Trem.frequency.value = 2 * (10 ** tone2TremFreq.slider.valueAsNumber);
+      tone2Trem.spread = tone2TremSpread.slider.valueAsNumber * 1.8;
+      tone2Trem.start();
+    }
+  
+    function tone2TremOff() {
+      tone2Trem.stop();
+    }
+  
+    function tone2TremFreqChange() {
+      tone2Trem.frequency.value = 2 * (10 ** tone2TremFreq.slider.valueAsNumber);
+    }
+  
+    function tone2TremSpreadChange() {
+      tone2Trem.spread = tone2TremSpread.slider.valueAsNumber * 1.8;
+    }
+  
+    function tone2VolChange() {
+      tone2.volume.value = tone2Vol.slider.valueAsNumber;
+    }
+  
+    function tone2FreqChange() {
+      tone2.frequency.value = tone2Freq.slider.valueAsNumber ** freqExp;
+    }
+    
+    
+    function tone2TremTypeSelect(ev) {
+      tone2Trem.type = ev.target.value;
+      tone2TremType.selected = ev.target.value;
+      }
+  
+    
 
 /* 
 
@@ -281,7 +426,16 @@
     visChange();
   }
   
+  function audResetExec() {
+    noiseToggle.off.checked = true;
+    noiseTremToggle.off.checked = true;
+    tone1Toggle.off.checked = true;
+    tone1TremToggle.off.checked = true;
+    tone2Toggle.off.checked = true;
+    tone2TremToggle.off.checked = true;
 
+    audChange();
+  }
 
   function audDiscrete(ev) {
     dbAudioDiscrete.update({
@@ -431,6 +585,10 @@
     db.doc('noise').update({
       'on': noiseToggle.on.checked,
       'volume': noiseVol.slider.valueAsNumber,
+      'trem.on': noiseTremToggle.on.checked,
+      'trem.freq': 2 * (10 ** noiseTremFreq.slider.valueAsNumber),
+      'trem.spread': noiseTremSpread.slider.valueAsNumber * 1.8,
+      'trem.type': noiseTremType.selected
     });
   
     db.doc('tone1').update({
@@ -442,8 +600,25 @@
       'trem.spread': tone1TremSpread.slider.valueAsNumber * 1.8,
       'trem.type': tone1TremType.selected
     });
-  }
 
+      
+    db.doc('tone2').update({
+      'on': tone2Toggle.on.checked,
+      'volume': tone2Vol.slider.valueAsNumber,
+      'freq': tone2Freq.slider.valueAsNumber ** freqExp,
+      'trem.on': tone2TremToggle.on.checked,
+      'trem.freq': 2 * (10 ** tone2TremFreq.slider.valueAsNumber),
+      'trem.spread': tone2TremSpread.slider.valueAsNumber * 1.8,
+      'trem.type': tone2TremType.selected
+    });
+
+  }
+/* 
+  function wordsChange() {
+    db.doc('words').update({
+      'on': wordsToggle.checked
+    });
+  } */
 
 
 

@@ -32,14 +32,19 @@
     new Audio('audio/snap.wav'),
     new Audio('audio/snap.wav')
   ];
-  let noiseTrem = new Tone.Tremolo(.25, 1).toMaster();
+
+  let noiseEnv = new Tone.AmplitudeEnvelope(.1,.2,1,.8).toMaster();
+  let noiseTrem = new Tone.Tremolo(.25, 1).connect(noiseEnv);
   noiseTrem.wet.value = 1;
   noiseTrem.spread = 180;
   let noise = new Tone.Noise('brown').connect(noiseTrem);
   // musicBox = new Tone.Player('audio/musicbox.mp3'),
   // noise.fadeIn = 2;
   // noise.fadeOut = 2;
-  let tone2 = new Tone.Oscillator(440, 'sine');
+  let tone2Env = new Tone.AmplitudeEnvelope(.1,.2,1,.8).toMaster();
+  let tone2Trem = new Tone.Tremolo(4, 1).connect(tone2Env);
+  tone2Trem.wet.value = 1;
+  let tone2 = new Tone.Oscillator(440, 'sine').connect(tone2Trem);
 
   // let tone1Trem = new Tone.Tremolo(4, 1).toMaster();
   // tone1Trem.wet.value = 1;
@@ -77,14 +82,16 @@
   //     musicBox: false
   // }
   let gifDisplay;
-  // let volSlider = document.getElementById('volSlider');
+  let volSlider = document.getElementById('volSlider');
 
-  // volSlider.oninput = changeVol;
+  volSlider.oninput = changeVol;
 
-  // function changeVol() {
-  //   console.log('run');
-  //   Tone.Master.volume.value = volSlider.valueAsNumber;
-  // }
+  changeVol();
+
+  function changeVol() {
+    Tone.Master.volume.value = volSlider.valueAsNumber;
+    console.log(`slider: ${volSlider.valueAsNumber}, tone.master: ${Tone.Master.volume.value}`);
+  }
 
 
   dbVisuals.onSnapshot(visUpdate);
@@ -174,7 +181,7 @@
     }
   }
 
-  function noiseUpdate(snapshot) {
+/*   function noiseUpdate(snapshot) {
     if (snapshot.data().on) {
       if (noise.state != 'started') { noise.start().connect(Tone.Master); }
       if (snapshot.data().volume != noise.volume.value) { noise.volume.value = snapshot.data().volume; } 
@@ -188,9 +195,33 @@
       noise.stop();
      }
   }
+ */
 
-  // let tone1Trem = new Tone.Tremolo(1, 0.5).toMaster().start();
+  
+  function noiseUpdate(snapshot) {
+    if (snapshot.data().on) {
+      if (noise.state != 'started')  {
+        noise.start();
+        noiseEnv.triggerAttack();
+      }
+      if (snapshot.data().trem.on) {
+        noiseTrem.start();
+        noiseTrem.type = snapshot.data().trem.type;
+        noiseTrem.frequency.value = snapshot.data().trem.freq;
+        noiseTrem.spread = snapshot.data().trem.spread;
+      } else {
+        noiseTrem.stop();
+      }
+    noise.volume.value = snapshot.data().volume;
+    } else if (noise.state == 'started') {
+      noiseEnv.triggerRelease();
+      setTimeout(noiseStop, 500);
+    }
+  }
 
+  function noiseStop() {
+    noise.stop();
+  }  
   
   function tone1Update(snapshot) {
     if (snapshot.data().on) {
@@ -211,13 +242,50 @@
     tone1.frequency.value = snapshot.data().freq;
     } else if (tone1.state == 'started') {
       tone1Env.triggerRelease();
-      setTimeout(toneStop, 500);
+      setTimeout(tone1Stop, 500);
     }
   }
 
-  function toneStop() {
+  function tone1Stop() {
     tone1.stop();
   }
+
+  function tone2Update(snapshot) {
+    if (snapshot.data().on) {
+      console.log(tone2Trem.state);
+      if (tone2.state != 'started')  {
+        tone2.start();
+        tone2Env.triggerAttack();
+      }
+      if (snapshot.data().trem.on) {
+        tone2Trem.start();
+        tone2Trem.type = snapshot.data().trem.type;
+        tone2Trem.frequency.value = snapshot.data().trem.freq;
+        tone2Trem.spread = snapshot.data().trem.spread;
+      } else {
+        tone2Trem.stop();
+      }
+    tone2.volume.value = snapshot.data().volume;
+    tone2.frequency.value = snapshot.data().freq;
+    } else if (tone2.state == 'started') {
+      tone2Env.triggerRelease();
+      setTimeout(tone2Stop, 500);
+    }
+  }
+
+  function tone2Stop() {
+    tone2.stop();
+  }
+
+  // function tone2Update(snapshot) {
+  //   if (snapshot.data().on) {
+  //     if (tone2.state != 'started') { tone2.start().connect(Tone.Master); }
+  //     if (snapshot.data().volume != tone2.volume.value) { tone2.volume.value = snapshot.data().volume; } 
+  //     if (snapshot.data().freq != tone2.frequency.value) { tone2.frequency.value = snapshot.data().freq; } 
+  //   } else if (tone2.state == 'started') {
+  //     tone2.stop();
+  //    }
+  // }
 
   // function tone1Update(snapshot) {
   //   if (snapshot.data().on) {
@@ -236,15 +304,7 @@
   //    }
   // }
 
-  function tone2Update(snapshot) {
-    if (snapshot.data().on) {
-      if (tone2.state != 'started') { tone2.start().connect(Tone.Master); }
-      if (snapshot.data().volume != tone2.volume.value) { tone2.volume.value = snapshot.data().volume; } 
-      if (snapshot.data().freq != tone2.frequency.value) { tone2.frequency.value = snapshot.data().freq; } 
-    } else if (tone2.state == 'started') {
-      tone2.stop();
-     }
-  }
+
 
 
 /*   function musicBoxUpdate(snapshot) {
