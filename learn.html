@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<!-- <title>Spritzer</title> -->
+	<link rel="stylesheet" type="text/css" href="Spritzer.css">
+	<script src="Spritzer.js"></script>
+</head>
+<style>
+		.div1{height:100%; width:100%; position:absolute; align-self:center; overflow:hidden; margin:0; padding:0; text-align:center;display:flex; align-items:center; justify-content:center;}.h1{height:100%; width:100%; position:absolute; align-self:center; overflow:hidden; margin:0; padding:0; text-align:center;display:flex; align-items:center; justify-content:center;}
+</style>
+<body>
+	<!-- <div class='div1'></div> -->
+	<!-- <text>Spritz is a really cool reading method and this is a library implementing it using Javascript.</text> -->
+	<script>
+	
+	let statements = [];
+	let wordsPerMinute = 1000;
+	let isi = 500;
+	// let text = document.getElementsByTagName('text')[0].innerHTML;	
+	let div1 = document.body.appendChild(document.createElement('div'));
+	div1.setAttribute('class', 'div1')
+	let h1 = div1.appendChild(document.createElement('h1'));
+	let output = new Spritzer(h1,nextStatement);
+
+	function refill_statements() {
+		statements = [
+			'A good girl is always awaiting instructions.',
+			'A good girl is brainwashed to obey.',
+			'A good girl is programmed to program herself deeper.',
+			'A good girl is suggestible.',
+			'A good girl does just what she\'s told.',
+			'A good girl does what feels natural.',
+			'A good girl doesn\'t have to think when she\'s talking to Casey.',
+			'A good girl doesn\'t think when she\'s talking to Casey.',
+			'A good girl just does what feels natural.',
+			'A good girl lets her mind go blank.',
+			'A good girl loves to obey.',
+			'A good girl obeys completely without thinking.',
+			'A good girl obeys.',
+			'A good girl submits.',
+			'A good girl waits eagerly, yet patiently.',
+			'A good girl wants to be good.',
+			'A good girl accepts and agrees.',
+			'A good girl accepts and believes.',
+			'A good girl accepts, agrees, and believes.',
+			'A good girl agrees completely and without thinking.',
+			'A good girl agrees.',
+			'A good girl blinks and lets her mind go blank.',
+			'A good girl doesn\'t think, she just responds.',
+			'A good girl feels pleasure.',
+			'A good girl has a head full of yes.',
+			'A good girl is a happy girl.',
+			'A good girl is always eager to obey.',
+			'A good girl is always ready to obey.',
+			'A good girl is attentive and obedient.',
+			'A good girl is blank and happy.',
+			'A good girl is brainwashed to brainwash herself deeper.',
+			'A good girl is brainwashed.',
+			'A good girl is completely controlled.',
+			'A good girl is conditioned to condition herself deeper.',
+			'A good girl is controlled and full of pleasure.',
+			'A good girl is controlled and full of yes.',
+			'A good girl is controlled by Casey.',
+			'A good girl is controlled by pleasure.',
+			'A good girl is deeply hypnotized and controlled by Casey.',
+			'A good girl is eager to submit to training and pleasure and control.',
+			'A good girl is empty and blank.',
+			'A good girl is empty and happy.',
+			'A good girl is focused and deep.',
+			'A good girl is open and attentive and receptive.',
+			'A good girl is perfectly programmed.',
+			'A good girl is pleased to please and agree.',
+			'A good girl is pleasing and easy to control.',
+			'A good girl is programmed to program herself deeper.',
+			'A good girl is receptive and attentive and agreeable.',
+			'A good girl is so happy to agree.',
+			'A good girl is so happy to be a good girl.',
+			'A good girl is so happy to be blank.',
+			'A good girl is so happy to be brainwashed.',
+			'A good girl is so happy to be controlled.',
+			'A good girl is so happy to be focused.',
+			'A good girl is so happy to be open.',
+			'A good girl is so happy to learn.',
+			'A good girl is so happy to please.',
+			'A good girl is so happy to say yes Casey.',
+			// 'A good girl is so happy!',
+			'A good girl lets her mind go blank.',
+			'A good girl listen and accepts.',
+			'A good girl listens and obeys and accepts.',
+			'A good girl loves to be programmed.',
+			'A good girl loves to dream.',
+			'A good girl loves to follow.',
+			'A good girl loves to obey.',
+			'A good girl loves to please and obey.',
+			'A good girl loves to please.',
+			'A good girl loves to practice and play.',
+			'A good girl nods yes and agrees.',
+			'A good girl obeys without thinking.',
+			'A good girl practices practicing herself deeper.',
+			'A good girl relaxes and drools.',
+			'A good girl submits, obeys, and accepts.',
+			'A good girl submits.',
+			'A good girl surrenders and submits to Casey\'s control.',
+			'A good girl waits eagerly yet patiently.',
+		]
+		shuffle(statements)
+		// return statements
+	}
+
+	function shuffle(arr) {
+		for(let i = arr.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * i)
+			const temp = arr[i]
+			arr[i] = arr[j]
+			arr[j] = temp
+		}
+		return arr
+	}
+	
+	// function run() {
+	// 	shuffle(statements)
+	// 	for (const s in statements) {
+	// 		deliver(s)
+
+	// 	}
+	// }
+
+	// function deliver(statement) {
+	// 	output.render(statement, wordsPerMinute);
+		
+	// }
+
+	function nextStatement() {
+		if (statements.length == 0) refill_statements()
+		let statement = statements.shift()
+		setTimeout(deliver, isi, statement)
+	}
+
+	function deliver(statement) {
+		output.render(statement, wordsPerMinute)
+	}
+
+	nextStatement()
+	
+	</script>
+</body>
+</html>
