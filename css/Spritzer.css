@@ -1,0 +1,30 @@
+.spritzed {
+    padding: 30px;
+    display:flex;
+    position: relative;
+}
+
+.spritzed::before, .spritzed::after {
+    content: "";
+    display: flex;
+    position: absolute;
+    left: 50%;
+    margin-left: -1px;
+    height: 10px;
+    background-color:rgba(0,0,0,.8);
+    width: 2px;
+    top: 0;
+}
+
+.spritzed::after {
+    top: auto;
+    bottom: 0;
+}
+
+.spritzed > div {
+    position: absolute;x
+}
+
+.highlight {
+    color: rgba(255,0,50,.8);
+}

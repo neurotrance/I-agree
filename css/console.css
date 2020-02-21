@@ -242,7 +242,8 @@ input[type=checkbox]:checked:active ~ label {
   max-width: 1500px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(3, minmax(419px, 1fr));
+  grid-template-columns: 375px 375px  467px;
+  /* grid-template-columns: repeat(2, minmax(467px, 1fr)); */
   grid-gap: 10px;
   grid-auto-rows: auto;
   overflow:auto;
@@ -285,15 +286,26 @@ input[type=checkbox]:checked:active ~ label {
   margin:10px 0;
   padding:10px 10px 10px 20px;
   display: grid;
-  grid-template-columns: repeat(4, minmax(5em, 1fr));
-  grid-gap: 10px;
-  grid-auto-rows: 25px;
+  grid-template-columns: 4em repeat(3, minmax(4em, 1fr));
+  grid-gap: 8px;
+  grid-auto-rows: 22px;
   /* border-top:1px solid #8d99a1; */
   border:solid #8d99a1;
   border-width: 0 0 0 3px;
   border-radius:15px;
 }
-
+.grouping4 {
+  margin:10px 0;
+  padding:10px 10px 10px 20px;
+  display: grid;
+  grid-template-columns: 4em repeat(4, minmax(4em, 1fr));
+  grid-gap: 8px;
+  grid-auto-rows: 22px;
+  /* border-top:1px solid #8d99a1; */
+  border:solid #8d99a1;
+  border-width: 0 0 0 3px;
+  border-radius:15px;
+}
 .knob-group {
   margin:10px 0;
   padding:10px 10px 10px 20px;
@@ -367,7 +379,7 @@ input[type=checkbox]:checked:active ~ label {
   align-items:center;
   font-family: 'Helvetica', sans-serif;
   letter-spacing: 1px;
-  font-size: 12px;
+  font-size: 11px;
   font-style:italic;
   font-weight: 600;
 }
@@ -375,11 +387,13 @@ input[type=checkbox]:checked:active ~ label {
   grid-column: 1;
   display:flex;
   width:100%;
-  justify-content:left;
+  justify-content:center;
   align-items:center;
   font-family: 'Helvetica', sans-serif;
   letter-spacing: 1px;
-  font-size: 13px;
+  font-size: 11px;
+  font-style:italic;
+  /* font-size: 13px; */
   font-weight: 600;
 }
 .bigLabel {
@@ -406,6 +420,7 @@ input[type=checkbox]:checked:active ~ label {
   display:flex;
   align-items:center;
 }
+
 .readout {
   position:relative;
   grid-column: 2;
@@ -445,6 +460,25 @@ select {
 /* select:focus {
 } */
 
+.screen {
+  display: grid;
+  position:relative;
+  grid-template-columns: repeat(3, minmax(4em, 1fr));
+  z-index:0;
+  padding:2px;
+  grid-gap: 6px;
+  grid-auto-rows: 22px;
+  background-color:rgb(36, 36, 36);
+}
+.screen4 {
+  display: grid;
+  position:relative;
+  grid-template-columns: repeat(4, minmax(4em, 1fr));
+  z-index:0;
+  grid-gap: 8px;
+  grid-auto-rows: 22px;
+  background-color:rgb(36, 36, 36);
+}
 .readout-text{
   z-index:1;
   display:flex;
@@ -455,8 +489,8 @@ select {
   justify-content:center;
   color:rgb(83, 166, 243);
   font-family:"Trebuchet MS";
-  font-size:16px;
-  font-weight:500;
+  font-size:15px;
+  font-weight:450;
   background-color:rgb(36, 36, 36);
   pointer-events:none;
 }
