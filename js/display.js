@@ -4,9 +4,6 @@
 
   let dbRoot = firebase.firestore();
   let db = dbRoot.collection('toolkit');
-  let dbVisuals = db.doc('visuals');
-  // let dbAudio = db.doc('audio');
-  let dbAudioDiscrete = db.doc('audioDiscrete');
   let div1 = document.querySelector('.div1');
   let div2 = document.querySelector('.div2');
   let div3 = document.querySelector('.div3');
@@ -94,16 +91,16 @@
   }
 
 
-  dbVisuals.onSnapshot(visUpdate);
+  db.doc('visuals').onSnapshot(visUpdate);
   // dbAudio.onSnapshot(audUpdate);
-  dbAudioDiscrete.onSnapshot(audDiscreteUpdate);
+  db.doc('audioDiscrete').onSnapshot(audDiscreteUpdate);
   db.doc('noise').onSnapshot(noiseUpdate);
   // db.doc('musicBox').onSnapshot(musicBoxUpdate);
   db.doc('tone1').onSnapshot(tone1Update);
   db.doc('tone2').onSnapshot(tone2Update);
+  db.doc('spritzer').onSnapshot(spritzUpdate);
 
-
-  
+ 
   function audDiscreteUpdate(snapshot) {
     let sound = {};
     Object.assign(sound, snapshot.data());
@@ -145,7 +142,9 @@
     if (visuals.stim != 'metronome' && prevVis.stim == 'metronome') { metroOff(); }
     else if (visuals.stim != 'colorsLights' && prevVis.stim == 'colorsLights') { colorsLights(false); }
     else if (visuals.stim != 'chaser' && prevVis.stim == 'chaser') { chaser.remove() }
-    else if (prevVis.stim.substring(0,3) == 'gif' && prevVis.stim != visuals.stim) { gifDisplay.remove(); }
+    else if (prevVis.stim.substring(0,3) == 'gif' && prevVis.stim != visuals.stim) { 
+        gifDisplay.remove();
+    }
     if (visuals.stim == 'flasher' && prevVis.stim != 'flasher') { flash(); }
     else if (visuals.stim == 'metronome') {
       if (prevVis.stim != 'metronome') { metroOn(); }
@@ -595,10 +594,177 @@ function chaserSetSpeed() {
 //      return(blinkTimeout);
   }
 
-  function show(text, params, container) {
-    if (container == undefined) container = div1;
-    if (params != undefined) Object.assign(container.style, params);
-    if (text != undefined) container.innerHTML = text;
+    function show(text, params, container) {
+        if (container == undefined) container = div1;
+        if (params != undefined) Object.assign(container.style, params);
+        if (text != undefined) container.innerHTML = text;
   }
+
+	
+	let statements = [];
+	let wordsPerMinute = 1200;
+	let isi = 200;
+	// let text = document.getElementsByTagName('text')[0].innerHTML;	
+	let divSpritz;
+	let hSpritz;
+	let spritzer;
+
+    function spritzUpdate(snapshot) {
+        if (snapshot.data().on) {
+            wordsPerMinute = snapshot.data().speed
+            if (divSpritz) {
+                if (spritzer.playing == false) {
+                    document.body.appendChild(divSpritz);
+                    spritzer.play()
+                }
+            } else {
+                divSpritz = document.createElement('div');
+                divSpritz.setAttribute('class', 'divSpritz');
+                hSpritz = document.createElement('div');
+                hSpritz.setAttribute('class','hSpritz')
+                divSpritz.appendChild(hSpritz);
+                document.body.appendChild(divSpritz);
+                // console.log('1: ' + hSpritz)
+                // console.log('2: ' + hSpritz.classList)
+                spritzer = new Spritzer(hSpritz,nextStatement);
+                nextStatement()
+            }
+        } else if (divSpritz) {
+            spritzer.pause();
+            divSpritz.remove();
+        }
+    }
+  
+	function refill_statements() {
+		console.log('refill')
+		statements = [
+			'A good girl is always awaiting instructions.',
+			'A good girl is brainwashed to obey.',
+			'A good girl is programmed to program herself deeper.',
+			'A good girl is suggestible.',
+			'A good girl does just what she\'s told.',
+			'A good girl does what feels natural.',
+			'A good girl doesn\'t have to think when she\'s talking to Casey.',
+			'A good girl doesn\'t think when she\'s talking to Casey.',
+			'A good girl just does what feels natural.',
+			'A good girl lets her mind go blank.',
+			'A good girl loves to obey.',
+			'A good girl obeys completely without thinking.',
+			'A good girl obeys.',
+			'A good girl submits.',
+			'A good girl waits eagerly, yet patiently.',
+			'A good girl wants to be good.',
+			'A good girl accepts and agrees.',
+			'A good girl accepts and believes.',
+			'A good girl accepts, agrees, and believes.',
+			'A good girl agrees completely and without thinking.',
+			'A good girl agrees.',
+			'A good girl blinks and lets her mind go blank.',
+			'A good girl doesn\'t think, she just responds.',
+			'A good girl feels pleasure.',
+			'A good girl has a head full of yes.',
+			'A good girl is a happy girl.',
+			'A good girl is always eager to obey.',
+			'A good girl is always ready to obey.',
+			'A good girl is attentive and obedient.',
+			'A good girl is blank and happy.',
+			'A good girl is brainwashed to brainwash herself deeper.',
+			'A good girl is brainwashed.',
+			'A good girl is completely controlled.',
+			'A good girl is conditioned to condition herself deeper.',
+			'A good girl is controlled and full of pleasure.',
+			'A good girl is controlled and full of yes.',
+			'A good girl is controlled by Casey.',
+			'A good girl is controlled by pleasure.',
+			'A good girl is deeply hypnotized and controlled by Casey.',
+			'A good girl is eager to submit to training and pleasure and control.',
+			'A good girl is empty and blank.',
+			'A good girl is empty and happy.',
+			'A good girl is focused and deep.',
+			'A good girl is open and attentive and receptive.',
+			'A good girl is perfectly programmed.',
+			'A good girl is pleased to please and agree.',
+			'A good girl is pleasing and easy to control.',
+			'A good girl is programmed to program herself deeper.',
+			'A good girl is receptive and attentive and agreeable.',
+			'A good girl is so happy to agree.',
+			'A good girl is so happy to be a good girl.',
+			'A good girl is so happy to be blank.',
+			'A good girl is so happy to be brainwashed.',
+			'A good girl is so happy to be controlled.',
+			'A good girl is so happy to be focused.',
+			'A good girl is so happy to be open.',
+			'A good girl is so happy to learn.',
+			'A good girl is so happy to please.',
+			'A good girl is so happy to say yes Casey.',
+			// 'A good girl is so happy!',
+			'A good girl lets her mind go blank.',
+			'A good girl listen and accepts.',
+			'A good girl listens and obeys and accepts.',
+			'A good girl loves to be programmed.',
+			'A good girl loves to dream.',
+			'A good girl loves to follow.',
+			'A good girl loves to obey.',
+			'A good girl loves to please and obey.',
+			'A good girl loves to please.',
+			'A good girl loves to practice and play.',
+			'A good girl nods yes and agrees.',
+			'A good girl obeys without thinking.',
+			'A good girl practices practicing herself deeper.',
+			'A good girl relaxes and drools.',
+			'A good girl submits, obeys, and accepts.',
+			'A good girl submits.',
+			'A good girl surrenders and submits to Casey\'s control.',
+			'A good girl waits eagerly yet patiently.',
+		]
+        shuffle(statements);
+        // statements = ['brainwashed brainwashed brainwashed brainwashed',
+        //               'brainwashed brainwashed brainwashed brainwashed',
+        //               'brainwashed brainwashed brainwashed brainwashed brainwashed brainwashed',]
+		// return statements
+	}
+
+	function shuffle(arr) {
+		for(let i = arr.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * i)
+			const temp = arr[i]
+			arr[i] = arr[j]
+			arr[j] = temp
+		}
+		return arr
+	}
+	
+	// function run() {
+	// 	shuffle(statements)
+	// 	for (const s in statements) {
+	// 		deliver(s)
+
+	// 	}
+	// }
+
+	// function deliver(statement) {
+	// 	spritzer.render(statement, wordsPerMinute);
+		
+	// }
+
+	function nextStatement() {
+		if (statements.length == 0) refill_statements()
+        let statement = statements.shift()
+		setTimeout(deliver, isi, statement)
+    }
+    // let keyWords = ['brainwash','pleas','hypn']
+    let keyWords = [];
+
+	function deliver(statement) {
+        // console.log(statement)
+		spritzer.render(statement, wordsPerMinute, keyWords)
+	}
+	
+
+
+
+
+
+
 
   })();
